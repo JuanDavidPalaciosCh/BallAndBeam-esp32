@@ -1,0 +1,136 @@
+# ===============================
+# --- Python ---
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg
+*.egg-info/
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python build
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.installed.cfg
+*.egg-info/
+pip-wheel-metadata/
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# pyre type checker
+.pyre/
+
+# pytype
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# ===============================
+# --- Arduino / PlatformIO ---
+# ===============================
+# Arduino build folders
+*.hex
+*.elf
+*.eep
+*.bin
+*.map
+*.dSYM/
+*.dmp
+
+# Build folders for Arduino IDE
+build/
+tmp/
+
+# PlatformIO
+.pio/
+.pioenvs/
+.vscode/.pio/
+
+# Arduino libraries build artifacts
+*.a
+*.o
+*.d
+
+# Backup files
+*.bak
+*.tmp
+
+# ===============================
+# --- Logs ---
+# ===============================
+*.log
+*.gz
+*.swp
+*.swo
+
+# ===============================
+# --- IDE / Editor files ---
+# ===============================
+# VSCode
+.vscode/
+.history/
+*.code-workspace
+
+# JetBrains IDEs (PyCharm, CLion, etc.)
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# ===============================
+# --- Misc ---
+# ===============================
+# Ignore any local secrets
+secrets.json
+.env.local
+.env.*.local
