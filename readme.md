@@ -95,6 +95,8 @@ kd = (wn*(2*zeta+n))/ alpha
 ![Imagen resultados](./img/res_teorico.png)
 
 
+--- 
+
 🌐 Aplicación Streamlit
 streamlit_app/main.py
 
@@ -133,6 +135,8 @@ streamlit_app/enviar_esp.py
     En la interfaz, ajusta los parámetros y presiona el botón Enviar PID al ESP32.
     Antes de enviar, asegúrate de haber cargado controlpid.ino en la ESP32 y de haber configurado la IP correcta que obtuviste con prueba_wifi.ino.
 
+---
+
 ▶️ Cómo ejecutar el proyecto en fisico
 
-    Corre el codigo *controlpid.ino*
+    Sube el codigo *controlpid.ino* a la esp32
