@@ -10,13 +10,13 @@ st.title("Simulador de PID Ball-Beam")
 # Controles en barra lateral
 st.sidebar.header("Parámetros del controlador")
 wn = st.sidebar.slider(
-    "Frecuencia natural (wn)", min_value=0.1, max_value=5.0, value=0.9, step=0.1
+    "Frecuencia natural (wn)", min_value=0.1, max_value=3.0, value=0.799, step=0.1
 )
 zeta = st.sidebar.slider(
-    "Amortiguamiento (ζ)", min_value=0.1, max_value=1.0, value=0.707, step=0.01
+    "Amortiguamiento (ζ)", min_value=0.1, max_value=1.0, value=0.95, step=0.01
 )
 dist = st.sidebar.slider(
-    "Referencia (m)", min_value=0.05, max_value=0.4, value=0.2, step=0.01
+    "Referencia (m)", min_value=0.00, max_value=0.35, value=0.2, step=0.01
 )
 
 # Calcular

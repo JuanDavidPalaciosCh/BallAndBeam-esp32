@@ -4,7 +4,7 @@ import control as ctrl
 
 def calcular_pid_y_simular(wn, zeta, dist=0.2, tmax=10, n=3):
     # Parámetros físicos
-    m = 0.02  # masa bola [kg]
+    m = 0.021  # masa bola [kg]
     g = 9.81  # gravedad [m/s^2]
     d = 0.05  # distancia eje a haz [m]
     L = 0.4  # longitud del haz [m]

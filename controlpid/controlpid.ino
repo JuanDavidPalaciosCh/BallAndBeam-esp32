@@ -4,10 +4,10 @@
 #include <math.h>
 
 // ==== PID ====
-float Kp = -5.384351559633028 ;
-float Ki = -2.7733211009174314;
-float Kd = -5.037629357798164;
-float Ts = 0.1;
+float Kp = -5.3323755934177955;
+float Ki =  -1.9137806203582354;
+float Kd =  -4.885361875637106;
+float Ts = 0.2;
 
 // ==== PID Interno ====
 float integral = 0.0;
@@ -27,15 +27,14 @@ int pinServo = 18;
 Adafruit_VL53L0X lox1 = Adafruit_VL53L0X();
 Adafruit_VL53L0X lox2 = Adafruit_VL53L0X();
 
-// ==== Función para leer sensor láser ====
-float leerSensor(Adafruit_VL53L0X &lox) {
-  VL53L0X_RangingMeasurementData_t measure;
-  lox.rangingTest(&measure, false);
-  if (measure.RangeStatus != 4) {
-    return 0.4 - (measure.RangeMilliMeter - 40) / 1000.0;
-  }
-  return 0.0;
-}
+
+// === Variables de filtrado ===
+const int N = 5;  // tamaño de ventana
+float ref_buffer[N];
+int ref_index = 0;
+float ref_sum = 0;
+int ref_count = 0;
+
 
 void setup() {
   Serial.begin(115200);
@@ -52,40 +51,21 @@ void setup() {
   // I2C
   Wire.begin(SDA_PIN, SCL_PIN);
 
-  // Pines XSHUT
-  pinMode(XSHUT1_PIN, OUTPUT);
-  pinMode(XSHUT2_PIN, OUTPUT);
+  inicializarSensoresLaser();
 
-  // Apagar ambos sensores
-  digitalWrite(XSHUT1_PIN, LOW);
-  digitalWrite(XSHUT2_PIN, LOW);
-  delay(1000);
-
-  // Inicializar sensor 1
-  digitalWrite(XSHUT1_PIN, HIGH);
-  delay(100);
-  if (!lox1.begin(0x30)) {
-    Serial.println(F("¡Fallo sensor 1!"));
-    while (1);
-  }
-  Serial.println(F("Sensor 1 listo"));
-
-  delay(500);
 }
 
 void loop() {
   // ===== Lecturas =====
   float distancia1 = leerSensor(lox1);
-
-  // Valor de referencia fijo por ahora
-  float distancia2 = 0.2;
-  float referencia = distancia2;
+  float distancia2 = leerSensor(lox2);
+  float referencia = filtrarReferencia(distancia2) +0.02;
 
   // ===== Calcular error =====
   float error = referencia - distancia1;
 
-  // ===== Zona muerta de ±15 mm =====
-  if (fabs(error) < 0.015) {
+  // ===== Zona muerta =====
+  if (fabs(error) < 0.01) {
     error = 0;
   }
 
@@ -123,4 +103,71 @@ void loop() {
   Serial.print("  Angulo: "); Serial.println(angulo, 1);
 
   delay((int)(Ts * 1000));
+}
+
+
+
+
+// === Funciones ===
+
+
+// ==== Función para leer sensor láser ====
+float leerSensor(Adafruit_VL53L0X &lox) {
+  VL53L0X_RangingMeasurementData_t measure;
+  lox.rangingTest(&measure, false);
+  if (measure.RangeStatus != 4) {
+    return 0.4 - ((measure.RangeMilliMeter) / 1000.0);
+  }
+  return 0.0;
+}
+
+
+// === Funcion para inicializar sensores laser ===
+void inicializarSensoresLaser() {
+  // Pines XSHUT
+  pinMode(XSHUT1_PIN, OUTPUT);
+  pinMode(XSHUT2_PIN, OUTPUT);
+
+  // Apagar ambos sensores
+  digitalWrite(XSHUT1_PIN, LOW);
+  digitalWrite(XSHUT2_PIN, LOW);
+  delay(1000);
+
+  // Inicializar sensor 1
+  digitalWrite(XSHUT1_PIN, HIGH);
+  delay(1000);
+  if (!lox1.begin(0x30)) {
+    Serial.println(F("¡Fallo sensor 1!"));
+    while (1);
+  }
+  Serial.println(F("Sensor 1 listo"));
+
+  delay(500);
+
+  // Inicializar sensor 2
+  digitalWrite(XSHUT2_PIN, HIGH);
+  delay(100);
+  if (!lox2.begin(0x31)) {
+    Serial.println(F("¡Fallo sensor 2!"));
+    while (1);
+  }
+  Serial.println(F("Sensor 2 listo"));
+  delay(1000);
+}
+
+// === Filtrado de referencia ===
+
+float filtrarReferencia(float nuevaLectura) {
+  // restar el valor viejo
+  ref_sum -= ref_buffer[ref_index];
+  // guardar la nueva lectura
+  ref_buffer[ref_index] = nuevaLectura;
+  // sumar la nueva
+  ref_sum += nuevaLectura;
+  // mover el índice
+  ref_index = (ref_index + 1) % N;
+  // llevar conteo hasta llenar
+  if (ref_count < N) ref_count++;
+  // retornar promedio
+  return ref_sum / ref_count;
 }
