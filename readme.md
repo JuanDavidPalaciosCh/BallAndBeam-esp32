@@ -3,6 +3,13 @@
 Este proyecto implementa un sistema **Ball and Beam** controlado mediante un **controlador PID**, calculado y ajustado desde una interfaz gráfica hecha con **Streamlit**, y ejecutado en una **ESP32** que maneja sensores láser y un servomotor.
 
 ---
+## 🎥 Video de demostración
+
+Video de demostración del proyecto funcionalÑ
+
+[Video demostrativo](img/demo_ballandbeam.mp4)
+
+---
 
 ## 📌 Descripción de la planta
 
@@ -98,6 +105,11 @@ kd = (wn*(2*zeta+n))/ alpha
 --- 
 
 🌐 Aplicación Streamlit
+
+Imagen de la app:
+
+![Imagen App](./img/app_web.jpeg)
+
 streamlit_app/main.py
 
     Interfaz gráfica principal.
