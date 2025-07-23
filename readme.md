@@ -5,9 +5,12 @@ Este proyecto implementa un sistema **Ball and Beam** controlado mediante un **c
 ---
 ## 🎥 Video de demostración
 
-Video de demostración del proyecto funcionalÑ
+Video de demostración del proyecto funcional
 
-[Video demostrativo](img/demo_ballandbeam.mp4)
+<video src="./img/demo_ballandbeam.mp4" controls width="600">
+  Tu navegador no soporta videos HTML5.
+</video>
+
 
 ---
 
