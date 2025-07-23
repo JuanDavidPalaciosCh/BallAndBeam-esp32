@@ -2,6 +2,9 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from controlador import calcular_pid_y_simular
 from enviar_esp import enviar_pid_wifi
+from recibir_esp import monitor_esp32
+
+IP_ESP = "192.168.1.127"
 
 st.set_page_config(page_title="PID Ball-Beam", layout="wide")
 
@@ -10,13 +13,13 @@ st.title("Simulador de PID Ball-Beam")
 # Controles en barra lateral
 st.sidebar.header("Parámetros del controlador")
 wn = st.sidebar.slider(
-    "Frecuencia natural (wn)", min_value=0.1, max_value=3.0, value=0.799, step=0.1
+    "Frecuencia natural (wn)", min_value=0.1, max_value=3.0, value=0.799, step=0.01
 )
 zeta = st.sidebar.slider(
     "Amortiguamiento (ζ)", min_value=0.1, max_value=1.0, value=0.95, step=0.01
 )
 dist = st.sidebar.slider(
-    "Referencia (m)", min_value=0.00, max_value=0.35, value=0.2, step=0.01
+    "Referencia (m)", min_value=0.00, max_value=0.4, value=0.2, step=0.01
 )
 
 # Calcular
@@ -27,6 +30,7 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Kp", f"{resultados['kp']:.3f}")
 col2.metric("Ki", f"{resultados['ki']:.3f}")
 col3.metric("Kd", f"{resultados['kd']:.3f}")
+
 
 # Graficar salida y control
 fig, axes = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
@@ -53,15 +57,17 @@ axes[1].grid(True)
 plt.tight_layout()
 st.pyplot(fig)
 
-
 # Envío a la ESP32 wifi
+ref_fisica = st.sidebar.toggle("Usar referencia física", value=False)
+
 if st.sidebar.button("Enviar PID al ESP32"):
     ok, mensaje = enviar_pid_wifi(
         resultados["kp"],
         resultados["ki"],
         resultados["kd"],
         resultados["dist"],
-        ip_esp32="192.168.1.50",  # Cambiar IP
+        ip_esp32=IP_ESP,
+        referencia_fisica=ref_fisica,
     )
 
     if ok:
